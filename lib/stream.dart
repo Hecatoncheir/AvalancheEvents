@@ -3,27 +3,27 @@ library stream;
 import 'dart:async';
 
 class StreamService {
-  Stream _stream;
-  StreamController _controller;
-  List<StreamService> _observers;
-  List<StreamService> _observables;
+  Stream stream;
+  StreamController controller;
+  List<StreamService> observers;
+  List<StreamService> observables;
 
   StreamService() {
-    _controller = new StreamController();
-    _stream = _controller.stream.asBroadcastStream();
-    _observers = new List();
-    _observables = new List();
+    controller = new StreamController();
+    stream = controller.stream.asBroadcastStream();
+    observers = new List();
+    observables = new List();
   }
 
-  observable(StreamService stream){
-    if (!_observers.contains(stream)){
-      _observers.add(stream);
+  observable(StreamService stream) {
+    if (!observers.contains(stream)) {
+      observers.add(stream);
     }
   }
 
-  observe(StreamService stream){
-    if (!_observables.contains(stream)){
-      _observables.add(stream);
+  observe(StreamService stream) {
+    if (!observables.contains(stream)) {
+      observables.add(stream);
     }
   }
 
@@ -31,16 +31,20 @@ class StreamService {
     Map detail = new Map();
     detail['message'] = message;
     detail['details'] = details;
-    _controller.add(detail);
+    controller.add(detail);
 
-    _observers.forEach((StreamService stream){
-      stream._controller.add(detail);
+    observers.forEach((StreamService stream) {
+      stream.controller.add(detail);
+    });
+
+    observables.forEach((StreamService stream) {
+      stream.controller.add(detail);
     });
   }
 
   on(String message, Function handler) {
-    _observables.forEach((StreamService streamService){
-      streamService._stream.listen((Map data) {
+    observables.forEach((StreamService streamService) {
+      streamService.stream.listen((Map data) {
         if (data['message'] == message) {
           Map details = data['details'];
           handler(details);
@@ -48,7 +52,16 @@ class StreamService {
       });
     });
 
-    _stream.listen((Map data) {
+    observers.forEach((StreamService streamService) {
+      streamService.stream.listen((Map data) {
+        if (data['message'] == message) {
+          Map details = data['details'];
+          handler(details);
+        }
+      });
+    });
+
+    stream.listen((Map data) {
       if (data['message'] == message) {
         Map details = data['details'];
         handler(details);
