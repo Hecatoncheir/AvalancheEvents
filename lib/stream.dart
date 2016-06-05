@@ -19,11 +19,19 @@ class StreamService {
     if (!observers.contains(stream)) {
       observers.add(stream);
     }
+
+    if (!stream.observables.contains(this)) {
+      stream.observables.add(this);
+    }
   }
 
   observe(StreamService stream) {
     if (!observables.contains(stream)) {
       observables.add(stream);
+    }
+
+    if (!stream.observers.contains(this)) {
+      stream.observers.add(this);
     }
   }
 
