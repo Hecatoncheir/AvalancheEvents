@@ -48,9 +48,7 @@ class StreamService {
     });
 
     observables.forEach((StreamService stream) {
-      if (!observers.contains(stream)) {
-        stream.controller.add(detail);
-      }
+      stream.controller.add(detail);
     });
   }
 
