@@ -1,9 +1,9 @@
 # stream_service
-Observe/Observable stream
+Simple work with stream
 
 ```dart
 class ExampleService extends StreamService {
-schema = new service.SchemaGenerator();
+
     cache = new Cache();
     storage = new Storage();
 
