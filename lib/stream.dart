@@ -42,11 +42,15 @@ class StreamService {
     controller.add(detail);
 
     observers.forEach((StreamService stream) {
-      stream.controller.add(detail);
+      if (!observables.contains(stream)) {
+        stream.controller.add(detail);
+      }
     });
 
     observables.forEach((StreamService stream) {
-      stream.controller.add(detail);
+      if (!observers.contains(stream)) {
+        stream.controller.add(detail);
+      }
     });
   }
 
