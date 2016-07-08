@@ -1,20 +1,12 @@
-library stream;
+library stream_service_mixin;
 
-import 'dart:async';
-
-class StreamService {
-  Stream stream;
+class StreamServiceMixin {
+    Stream stream;
   StreamController controller;
   List<StreamService> observers;
   List<StreamService> observables;
-
-  StreamService() {
-    controller = new StreamController();
-    stream = controller.stream.asBroadcastStream();
-    observers = new List();
-    observables = new List();
-  }
-
+  
+  /// check
   observable(StreamService stream) {
     if (!observers.contains(stream)) {
       observers.add(stream);

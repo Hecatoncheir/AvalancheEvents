@@ -1,7 +1,13 @@
-# stream_service
-Simple work with stream
+# Stream Service
+- Library for decouple many objects
+- Simple subscription object events
 
 ```dart
+
+library example_lib;
+
+import 'package:stream_service/stream_service.dart';
+
 class ExampleService extends StreamService {
 
     cache = new Cache();
@@ -29,3 +35,12 @@ class ExampleService extends StreamService {
     cache.dispatchEvent('from cache');
 }
 ```
+
+Details
+------
+*GRASP* - [wiki](https://en.wikipedia.org/wiki/GRASP)
+ - *Low coupling* - [wiki](https://en.wikipedia.org/wiki/GRASP#Low_coupling)
+
+*Observer Design Pattern* - [sourcemaking](https://sourcemaking.com/design_patterns/observer)
+
+*Mediator Design Pattern* - [sourcemaking](https://sourcemaking.com/design_patterns/mediator)
