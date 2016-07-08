@@ -1,11 +1,11 @@
 library stream_service_mixin;
 
 class StreamServiceMixin {
-    Stream stream;
+  Stream stream;
   StreamController controller;
   List<StreamService> observers;
   List<StreamService> observables;
-  
+
   /// check
   observable(StreamService stream) {
     if (!observers.contains(stream)) {
