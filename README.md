@@ -1,6 +1,6 @@
 # Stream Service
 - Library for decouple many objects
-- Simple subscription object events
+- Simple subscription on object events
 
 ```dart
 
