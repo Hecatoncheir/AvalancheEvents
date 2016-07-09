@@ -1,6 +1,5 @@
 library stream_service_test;
 
-import 'dart:async';
 import 'package:test/test.dart';
 
 import 'package:stream_service/stream_service.dart';
@@ -46,12 +45,13 @@ main() async {
       TestStreamService secondTestObject = new TestStreamService();
 
       firstTestObject.observable(secondTestObject);
+      secondTestObject.observable(firstTestObject);
 
       secondTestObject.on(
           'testEventFromFirstTestObject',
           expectAsync((Map data) {
             expect(data['details'], isTrue);
-          }, count: 2));
+          }, count: 1));
 
       expect(
           secondTestObject.treatmentEvents

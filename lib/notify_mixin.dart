@@ -24,15 +24,15 @@ class NotifyMixin {
   /// Создание события и подписи к нему.
   /// Распространение события каждому наблюдающему объекту.
   dispatchEvent(String message, [dynamic details]) {
+    Map detail = new Map(); // Детали события
+    detail['message'] = message;
+    detail['details'] = details;
+
     /// Добавление подписи события в
     /// список создаваемых объектом событий.
     if (!generatedEvents.contains(message)) {
       generatedEvents.add(message);
     }
-
-    Map detail = new Map(); // Детали события
-    detail['message'] = message;
-    detail['details'] = details;
 
     /// Добавление события в свой собственный поток.
     /// Иногда события внутри обекта не должны
@@ -42,10 +42,8 @@ class NotifyMixin {
 
     /// Когда наблюдаемый объект создает событие
     /// наблюдатели должны его получить.
-    observers.forEach((StreamService stream) {
-      if (!observables.contains(stream)) {
-        stream.controller.add(detail);
-      }
+    observers.forEach((StreamService observableObjectStream) {
+      observableObjectStream.controller.add(detail);
     });
   }
 
@@ -60,25 +58,14 @@ class NotifyMixin {
     }
 
     /// Обработчики события подписываются
-    /// на собственный поток тоже.
+    /// на собственный поток.
+    /// Потому как сюда будут публиковаться события
+    /// из наблюдаемых объектов.
     stream.listen((Map data) {
       if (data['message'] == message) {
         Map details = data['details'];
         handler(details);
       }
-    });
-
-    /// Нужно слушать события каждого наблюдаемого объекта
-    observables.forEach((StreamService streamService) {
-      streamService.stream.listen((Map data) {
-        /// Проверка подписи события
-        if (data['message'] == message) {
-          Map details = data['details'];
-
-          /// Передача обработчику деталей события
-          handler(details);
-        }
-      });
     });
   }
 }
