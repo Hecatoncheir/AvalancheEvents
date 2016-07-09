@@ -1,21 +1,20 @@
-library stream;
+library stream_service;
 
 import 'dart:async';
 
-import 'stream_service_mixin.dart';
+//Mixins
+part 'notify_mixin.dart';
+part 'observable_mixin.dart';
+part 'subscription_mixin.dart';
 
-class StreamService extends Object with StreamServiceMixin {
-  Stream stream;
+class StreamService extends Object with NotifyMixin, ObservableMixin {
   StreamController controller;
-
-  List<StreamService> observers;
-  List<StreamService> observables;
+  Stream stream;
+  StreamService streamService; // Нужен для observable миксина
 
   StreamService() {
-    stream = controller.stream.asBroadcastStream();
     controller = new StreamController();
-
-    observers = new List();
-    observables = new List();
+    stream = controller.stream.asBroadcastStream();
+    streamService = this;
   }
 }
