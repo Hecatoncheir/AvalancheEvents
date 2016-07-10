@@ -1,39 +1,23 @@
 # Stream Service
-- Library for decouple many objects
+- Stream for decouple many objects
 - Simple subscription on object events
+
+**All you need is stream**
+
+[![Build Status](https://codeship.com/projects/162485/status?branch=master
+)](https://codeship.com/projects/162485/status?branch=master
+)
+
+[Cloud9 - editor](https://ide.c9.io/rasart/stream_service)
+
 
 ```dart
 
-library example_lib;
+library example_library;
 
 import 'package:stream_service/stream_service.dart';
 
-class ExampleService extends StreamService {
 
-    cache = new Cache();
-    storage = new Storage();
-
-    cache.observe(storage);
-    cache.observable(storage);
-    this.observe(cache);
-    this.observable(storage);
-    storage.observe(this);
-
-    cache.on('from storage',(event){
-     print('storage from');
-    });
-
-    storage.on('from cache',(event){
-      print('cache from');
-      storage.dispatchEvent('from storage');
-    });
-
-    on('from cache', (event){
-      print(event);
-    });
-
-    cache.dispatchEvent('from cache');
-}
 ```
 
 Details
