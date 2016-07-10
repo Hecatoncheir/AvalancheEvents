@@ -4,8 +4,8 @@
 
 **All you need is stream**
 
-[![Build Status](https://codeship.com/projects/162485/status?branch=master
-)](https://codeship.com/projects/162485/status?branch=master
+[![Build Status](https://codeship.com/projects/d800fba0-28ea-0134-04f3-5a347c0ad183/status?branch=master
+)](https://codeship.com/projects/d800fba0-28ea-0134-04f3-5a347c0ad183/status?branch=master
 )
 
 [Cloud9 - editor](https://ide.c9.io/rasart/stream_service)
