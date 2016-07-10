@@ -15,8 +15,45 @@
 
 library example_library;
 
+import 'dart:async';
+
 import 'package:stream_service/stream_service.dart';
 
+/// Simple extend class
+class BestClass extends StreamService {}
+
+/// Or if your class already have extends:
+class OtherBestClass extends Object with ObservableMixin, NotifyMixin {
+
+    /// Some stream and controller
+    StreamController controller;
+    Stream stream;
+    
+    /// For observable method
+    var streamService;
+    
+    OtherBestClass(){
+        streamService = this;
+        
+        controller = new StreamController();
+        stream = controller.stream.asBroadcastStream();
+    }
+    
+}
+
+void main() {
+    BestClass bestClass = new BestClass();
+    OtherBestClass otherBestClass = new OtherBestClass();
+    
+    bestClass.observable(otherBestClass);
+    
+    /// Just listen self stream
+    otherBestClass.on('Event from bestClass', (bool eventData){
+        print(eventData); // is true
+    });
+    
+    bestClass.dispatchEvent('Event from bestClass', true);
+}
 
 ```
 
