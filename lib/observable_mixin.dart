@@ -14,17 +14,37 @@ class ObservableMixin {
   StreamService streamService;
 
   /// Добавление объектов в списки друг друга
-  observable(StreamService observableObjectStream) {
+  observable(ObservableMixin observableObject) {
     /// Добавление переданного объекта в
     /// список наблюдателей.
-    if (!observers.contains(observableObjectStream)) {
-      observers.add(observableObjectStream);
+    if (!observers.contains(observableObject)) {
+      observers.add(observableObject);
     }
 
     /// Добавление объекта (this) в список
     /// наблюдаемых объектов переданного объекта.
-    if (!observableObjectStream.observables.contains(streamService)) {
-      observableObjectStream.observables.add(streamService);
+    if (!observableObject.observables.contains(streamService)) {
+      observableObject.observables.add(streamService);
+    }
+  }
+
+  /// Удаление наблюдателя за объектом эмитирующим события
+  removeObserver(ObservableMixin observerObject) {
+    if (observers.contains(observerObject)) {
+      observers.remove(observerObject);
+    }
+    if (observerObject.observables.contains(streamService)) {
+      observerObject.observables.remove(streamService);
+    }
+  }
+
+  /// Отписка от событий наблюдаемого объекта
+  removeObservable(ObservableMixin observableObject) {
+    if (observables.contains(observableObject)) {
+      observables.remove(observableObject);
+    }
+    if (observableObject.observers.contains(streamService)) {
+      observableObject.observers.remove(streamService);
     }
   }
 }

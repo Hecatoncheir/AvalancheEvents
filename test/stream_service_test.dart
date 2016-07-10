@@ -1,12 +1,104 @@
 library stream_service_test;
 
+import 'dart:async';
 import 'package:test/test.dart';
 
 import 'package:stream_service/stream_service.dart';
 
 class TestStreamService extends StreamService {}
 
+class TestObservable extends Object with ObservableMixin {
+  var streamService;
+  TestObservable() {
+    streamService = this;
+  }
+}
+
+class TestNotify extends Object with NotifyMixin {
+  StreamController controller;
+  Stream stream;
+
+  TestNotify() {
+    controller = new StreamController();
+    stream = controller.stream.asBroadcastStream();
+  }
+}
+
 main() async {
+  group('Observable mixin', () {
+    test('can add observers', () {
+      TestObservable testObservable = new TestObservable();
+      TestStreamService firstTestObject = new TestStreamService();
+      expect(testObservable.observers, isNotNull);
+
+      testObservable.observable(firstTestObject);
+      expect(testObservable.observers.contains(firstTestObject), isTrue);
+      expect(firstTestObject.observables.contains(testObservable), isTrue);
+    });
+
+    test('can remove observers', () {
+      TestObservable testObservable = new TestObservable();
+      TestStreamService firstTestObject = new TestStreamService();
+
+      testObservable.observable(firstTestObject);
+      expect(testObservable.observers.contains(firstTestObject), isTrue);
+      expect(firstTestObject.observables.contains(testObservable), isTrue);
+
+      testObservable.removeObserver(firstTestObject);
+      expect(!testObservable.observers.contains(firstTestObject), isTrue);
+      expect(!firstTestObject.observables.contains(testObservable), isTrue);
+    });
+
+    test('can remove observables', () {
+      TestObservable testObservable = new TestObservable();
+      TestStreamService firstTestObject = new TestStreamService();
+
+      testObservable.observable(firstTestObject);
+      expect(testObservable.observers.contains(firstTestObject), isTrue);
+      expect(firstTestObject.observables.contains(testObservable), isTrue);
+
+      firstTestObject.removeObservable(testObservable);
+      expect(!testObservable.observers.contains(firstTestObject), isTrue);
+      expect(!firstTestObject.observables.contains(testObservable), isTrue);
+    });
+  });
+
+  group('Notify mixin', () {
+    test('can dispatch and register event in generatedEvents list', () {
+      TestNotify testNotify = new TestNotify();
+      testNotify.dispatchEvent('testEvent');
+      expect(testNotify.generatedEvents.contains('testEvent'), isTrue);
+    });
+
+    test(
+        'can set handler for event and register event message in treatmentEvents list',
+        () {
+      TestNotify testNotify = new TestNotify();
+      testNotify.on('testEvent', () {});
+      expect(testNotify.treatmentEvents.contains('testEvent'), isTrue);
+    });
+
+    test('can listen event', () {
+      TestNotify testNotify = new TestNotify();
+      testNotify.on(
+          'testEvent',
+          expectAsync((Map data) {
+            expect(data['message'], equals('testEvent'));
+          }, count: 1));
+      testNotify.dispatchEvent('testEvent');
+    });
+
+    test('can dispatch any object in details', () {
+      TestNotify testNotify = new TestNotify();
+      testNotify.on(
+          'testEvent',
+          expectAsync((details) {
+            expect(details, isTrue);
+          }, count: 1));
+      testNotify.dispatchEvent('testEvent', true);
+    });
+  });
+
   group('StreamService', () {
     test('can be extendable', () {
       TestStreamService firstTestObject = new TestStreamService();
@@ -45,7 +137,6 @@ main() async {
       TestStreamService secondTestObject = new TestStreamService();
 
       firstTestObject.observable(secondTestObject);
-      secondTestObject.observable(firstTestObject);
 
       secondTestObject.on(
           'testEventFromFirstTestObject',
@@ -68,10 +159,11 @@ main() async {
 
       secondTestObject.observable(firstTestObject);
 
-      firstTestObject.on('testEventFromSecondTestObject',
+      firstTestObject.on(
+          'testEventFromSecondTestObject',
           expectAsync((Map data) {
-        expect(data['details'], isTrue);
-      }));
+            expect(data['details'], isTrue);
+          }, count: 1));
 
       expect(
           firstTestObject.treatmentEvents

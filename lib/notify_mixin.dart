@@ -6,7 +6,7 @@ part of stream_service;
 /// и тогда наблюдаемые объекты перед отправкой события будут
 /// проверять необходимость этого события для этого объекта.
 class NotifyMixin {
-  Stream stream;
+  Stream stream; // нужен для метода on
   StreamController controller;
 
   /// Список наблюдателей
@@ -22,7 +22,12 @@ class NotifyMixin {
   List<String> generatedEvents = new List();
 
   /// Создание события и подписи к нему.
-  /// Распространение события каждому наблюдающему объекту.
+  /// Распространение события каждому наблюдающему объекту
+  /// в случае если у наблюдающего обьекта есть обработчик
+  /// для этого события который отмечен в treatmentEvents списке.
+  /// Так же если есть обработчик внутри объекта создавшего событие
+  /// событие публикуется и в его поток.
+  /// Поведение похожее на паттерн Mediator.
   dispatchEvent(String message, [dynamic details]) {
     Map detail = new Map(); // Детали события
     detail['message'] = message;
@@ -38,12 +43,16 @@ class NotifyMixin {
     /// Иногда события внутри обекта не должны
     /// обрабатываться где-нибудь кроме
     /// как самим объектом.
-    controller.add(detail);
+    if (treatmentEvents.contains(message)) {
+      controller.add(detail);
+    }
 
     /// Когда наблюдаемый объект создает событие
     /// наблюдатели должны его получить.
     observers.forEach((StreamService observableObjectStream) {
-      observableObjectStream.controller.add(detail);
+      if (observableObjectStream.treatmentEvents.contains(message)) {
+        observableObjectStream.controller.add(detail);
+      }
     });
   }
 
@@ -63,8 +72,12 @@ class NotifyMixin {
     /// из наблюдаемых объектов.
     stream.listen((Map data) {
       if (data['message'] == message) {
-        Map details = data['details'];
-        handler(details);
+        if (data['details'] != null) {
+          var details = data['details'];
+          handler(details);
+        } else {
+          handler(data);
+        }
       }
     });
   }
