@@ -1,6 +1,7 @@
 # Stream Service
 - Stream for decouple many objects
 - Simple subscription on object events
+- Work both, on client and server
 
 **All you need is stream**
 
