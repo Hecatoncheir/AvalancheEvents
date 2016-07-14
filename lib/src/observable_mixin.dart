@@ -1,17 +1,11 @@
 part of stream_service;
 
 class ObservableMixin {
-  Stream stream;
-  StreamController controller;
-
   /// Список наблюдателей
   List<StreamService> observers = new List();
 
   /// Список наблюдаемых объектов
   List<StreamService> observables = new List();
-
-  /// Ссылка на сам объект со свойствами observers и observables
-  StreamService streamService;
 
   /// Добавление объектов в списки друг друга
   observable(ObservableMixin observableObject) {
@@ -23,8 +17,8 @@ class ObservableMixin {
 
     /// Добавление объекта (this) в список
     /// наблюдаемых объектов переданного объекта.
-    if (!observableObject.observables.contains(streamService)) {
-      observableObject.observables.add(streamService);
+    if (!observableObject.observables.contains(this)) {
+      observableObject.observables.add(this);
     }
   }
 
@@ -33,8 +27,8 @@ class ObservableMixin {
     if (observers.contains(observerObject)) {
       observers.remove(observerObject);
     }
-    if (observerObject.observables.contains(streamService)) {
-      observerObject.observables.remove(streamService);
+    if (observerObject.observables.contains(this)) {
+      observerObject.observables.remove(this);
     }
   }
 
@@ -43,8 +37,8 @@ class ObservableMixin {
     if (observables.contains(observableObject)) {
       observables.remove(observableObject);
     }
-    if (observableObject.observers.contains(streamService)) {
-      observableObject.observers.remove(streamService);
+    if (observableObject.observers.contains(this)) {
+      observableObject.observers.remove(this);
     }
   }
 }

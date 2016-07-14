@@ -5,24 +5,11 @@ import 'package:test/test.dart';
 
 import 'package:stream_service/stream_service.dart';
 
-class TestStreamService extends StreamService {}
+class TestStreamService extends StreamService {} // Содержит все миксины
 
-class TestObservable extends Object with ObservableMixin {
-  var streamService;
-  TestObservable() {
-    streamService = this;
-  }
-}
+class TestObservable extends Object with ObservableMixin {}
 
-class TestNotify extends Object with NotifyMixin {
-  StreamController controller;
-  Stream stream;
-
-  TestNotify() {
-    controller = new StreamController();
-    stream = controller.stream.asBroadcastStream();
-  }
-}
+class TestNotify extends Object with NotifyMixin {}
 
 main() async {
   group('Observable mixin', () {
@@ -103,20 +90,14 @@ main() async {
     test('can be extendable', () {
       TestStreamService firstTestObject = new TestStreamService();
       TestStreamService secondTestObject = new TestStreamService();
-      StreamService firstStreamService = firstTestObject.streamService;
 
-      expect(
-          firstTestObject.streamService.hashCode !=
-              secondTestObject.streamService.hashCode,
-          isTrue);
+      expect(firstTestObject.hashCode != secondTestObject.hashCode, isTrue);
 
       expect(
           firstTestObject.stream.hashCode != secondTestObject.stream.hashCode,
           isTrue);
 
       expect(firstTestObject.hashCode != secondTestObject.hashCode, isTrue);
-
-      expect(firstStreamService, isNotNull);
     });
 
     test('can be observable', () async {

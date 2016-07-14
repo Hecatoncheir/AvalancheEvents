@@ -43,21 +43,11 @@ void main() {
 Or if your class already have extends:
 ```dart
 class OtherBestClass extends Object with ObservableMixin, NotifyMixin {
-
-    /// Some stream and controller
-    StreamController controller;
-    Stream stream;
     
-    /// For observable method
-    var streamService;
-    
-    OtherBestClass(){
-        streamService = this;
-        
-        controller = new StreamController();
-        stream = controller.stream.asBroadcastStream();
+    /// Custom controller
+    OtherBestClass() {
+       /// Nothing todo 
     }
-    
 }
 
 ```

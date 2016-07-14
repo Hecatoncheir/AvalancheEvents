@@ -6,14 +6,10 @@ part of stream_service;
 /// и тогда наблюдаемые объекты перед отправкой события будут
 /// проверять необходимость этого события для этого объекта.
 class NotifyMixin {
-  Stream stream; // нужен для метода on
+  Stream stream;
   StreamController controller;
 
-  /// Список наблюдателей
-  List<StreamService> observers = new List();
-
-  /// Список наблюдаемых объектов
-  List<StreamService> observables = new List();
+  List observers; // Может быть, может не быть.
 
   /// Список ожидаемых объектом событий
   List<String> treatmentEvents = new List();
@@ -33,6 +29,12 @@ class NotifyMixin {
     detail['message'] = message;
     detail['details'] = details;
 
+    /// Если контроллера потока еще нет,
+    /// его нужно создать.
+    if (this.controller == null) {
+      this.controller = new StreamController();
+    }
+
     /// Добавление подписи события в
     /// список создаваемых объектом событий.
     if (!generatedEvents.contains(message)) {
@@ -44,20 +46,35 @@ class NotifyMixin {
     /// обрабатываться где-нибудь кроме
     /// как самим объектом.
     if (treatmentEvents.contains(message)) {
-      controller.add(detail);
+      this.controller.add(detail);
     }
 
     /// Когда наблюдаемый объект создает событие
     /// наблюдатели должны его получить.
-    observers.forEach((StreamService observableObjectStream) {
-      if (observableObjectStream.treatmentEvents.contains(message)) {
-        observableObjectStream.controller.add(detail);
-      }
-    });
+    if (this.observers != null) {
+      (this.observers as List).forEach((NotifyMixin observableObject) {
+        if (observableObject.treatmentEvents.contains(message)) {
+          observableObject.controller.add(detail);
+        }
+      });
+    }
   }
 
   /// Подписка на событие обработчика
   on(String message, Function handler) {
+    /// Если потока нет, а ему необходимо быть,
+    /// остается только одно!
+    if (this.stream == null) {
+      /// А еще может случится так что обработчки
+      /// события будет назначен до того как
+      /// произойдет сомо событие. А сам поток
+      /// еще не создан, понадобится контроллер для этого и его поток.
+      if (this.controller == null) {
+        this.controller = new StreamController();
+      }
+      this.stream = controller.stream.asBroadcastStream();
+    }
+
     /// Добавление подписи обрабатываемого события в
     /// список ожидаемых объектом событий.
     /// Нужно проверять этот список объектов
@@ -70,7 +87,7 @@ class NotifyMixin {
     /// на собственный поток.
     /// Потому как сюда будут публиковаться события
     /// из наблюдаемых объектов.
-    stream.listen((Map data) {
+    this.stream.listen((Map data) {
       if (data['message'] == message) {
         if (data['details'] != null) {
           var details = data['details'];
