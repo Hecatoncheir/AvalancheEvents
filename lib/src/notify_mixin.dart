@@ -16,12 +16,12 @@ class NotifyMixin {
 
   /// Список создаваемых объектом событий
   List<String> generatedEvents = new List();
-  
+
   /// Проверка stream и controller.
   /// Если поток еще не создан
-  /// нужно инициализировать 
+  /// нужно инициализировать
   /// контроллер и его поток.
-  void checkStream(){
+  void checkStream() {
     /// Если потока нет, а ему необходимо быть,
     /// остается только одно!
     if (this.stream == null) {
