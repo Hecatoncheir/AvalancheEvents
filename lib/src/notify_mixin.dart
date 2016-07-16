@@ -9,8 +9,6 @@ class NotifyMixin {
   Stream stream;
   StreamController controller;
 
-  List observers; // Может быть, может не быть.
-
   /// Список ожидаемых объектом событий
   List<String> treatmentEvents = new List();
 
@@ -22,13 +20,7 @@ class NotifyMixin {
   /// нужно инициализировать
   /// контроллер и его поток.
   void checkStream() {
-    /// Если потока нет, а ему необходимо быть,
-    /// остается только одно!
     if (this.stream == null) {
-      /// А еще может случится так что обработчки
-      /// события будет назначен до того как
-      /// произойдет сомо событие. А сам поток
-      /// еще не создан, понадобится контроллер для этого и его поток.
       if (this.controller == null) {
         this.controller = new StreamController();
       }
@@ -64,14 +56,20 @@ class NotifyMixin {
       this.controller.add(detail);
     }
 
-    /// Когда наблюдаемый объект создает событие
-    /// наблюдатели должны его получить.
-    if (this.observers != null) {
-      (this.observers as List).forEach((NotifyMixin observableObject) {
-        if (observableObject.treatmentEvents.contains(message)) {
-          observableObject.controller.add(detail);
-        }
-      });
+    /// Наблюдателей может не оказаться и события
+    /// будут опубликованны только в свой поток.
+    try {
+      /// Когда наблюдаемый объект создает событие
+      /// наблюдатели должны его получить.
+      if (this.observers != null) {
+        (this.observers as List).forEach((NotifyMixin observableObject) {
+          if (observableObject.treatmentEvents.contains(message)) {
+            observableObject.controller.add(detail);
+          }
+        });
+      }
+    } catch (error) {
+      print("Object doesn't have observers");
     }
   }
 
