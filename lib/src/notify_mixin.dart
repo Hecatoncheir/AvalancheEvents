@@ -16,6 +16,25 @@ class NotifyMixin {
 
   /// Список создаваемых объектом событий
   List<String> generatedEvents = new List();
+  
+  /// Проверка stream и controller.
+  /// Если поток еще не создан
+  /// нужно инициализировать 
+  /// контроллер и его поток.
+  void checkStream(){
+    /// Если потока нет, а ему необходимо быть,
+    /// остается только одно!
+    if (this.stream == null) {
+      /// А еще может случится так что обработчки
+      /// события будет назначен до того как
+      /// произойдет сомо событие. А сам поток
+      /// еще не создан, понадобится контроллер для этого и его поток.
+      if (this.controller == null) {
+        this.controller = new StreamController();
+      }
+      this.stream = controller.stream.asBroadcastStream();
+    }
+  }
 
   /// Создание события и подписи к нему.
   /// Распространение события каждому наблюдающему объекту
@@ -29,11 +48,7 @@ class NotifyMixin {
     detail['message'] = message;
     detail['details'] = details;
 
-    /// Если контроллера потока еще нет,
-    /// его нужно создать.
-    if (this.controller == null) {
-      this.controller = new StreamController();
-    }
+    checkStream(); // Проверка потока и его контроллера
 
     /// Добавление подписи события в
     /// список создаваемых объектом событий.
@@ -62,18 +77,7 @@ class NotifyMixin {
 
   /// Подписка на событие обработчика
   on(String message, Function handler) {
-    /// Если потока нет, а ему необходимо быть,
-    /// остается только одно!
-    if (this.stream == null) {
-      /// А еще может случится так что обработчки
-      /// события будет назначен до того как
-      /// произойдет сомо событие. А сам поток
-      /// еще не создан, понадобится контроллер для этого и его поток.
-      if (this.controller == null) {
-        this.controller = new StreamController();
-      }
-      this.stream = controller.stream.asBroadcastStream();
-    }
+    checkStream(); // Проверка потока и его контроллера
 
     /// Добавление подписи обрабатываемого события в
     /// список ожидаемых объектом событий.
