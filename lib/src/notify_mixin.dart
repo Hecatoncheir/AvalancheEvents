@@ -9,6 +9,9 @@ class NotifyMixin {
   Stream stream;
   StreamController controller;
 
+  /// Может содержать список наблюдателей
+  List observers;
+
   /// Список ожидаемых объектом событий
   List<String> treatmentEvents = new List();
 
@@ -61,8 +64,8 @@ class NotifyMixin {
     try {
       /// Когда наблюдаемый объект создает событие
       /// наблюдатели должны его получить.
-      if (this.observers != null) {
-        (this.observers as List).forEach((NotifyMixin observableObject) {
+      if (this.observers != null && this.observers is List) {
+        this.observers.forEach((NotifyMixin observableObject) {
           if (observableObject.treatmentEvents.contains(message)) {
             observableObject.controller.add(detail);
           }
