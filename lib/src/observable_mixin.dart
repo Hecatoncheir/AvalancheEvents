@@ -1,11 +1,11 @@
-part of stream_service;
+part of avalanche_events;
 
 class ObservableMixin {
   /// Список наблюдателей
-  List<StreamService> observers = new List();
+  List<ObservableMixin> observers = new List();
 
   /// Список наблюдаемых объектов
-  List<StreamService> observables = new List();
+  List<ObservableMixin> observables = new List();
 
   /// Добавление объектов в списки друг друга
   observable(ObservableMixin observableObject) {

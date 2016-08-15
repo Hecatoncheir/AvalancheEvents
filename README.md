@@ -1,4 +1,4 @@
-# Stream Service
+# Avalanche events
 - Stream for decouple many objects
 - Simple subscription on object events
 - Work both, on client and server
@@ -9,7 +9,7 @@
 )](https://codeship.com/projects/d800fba0-28ea-0134-04f3-5a347c0ad183/status?branch=master
 )
 
-[Cloud9 - editor](https://ide.c9.io/rasart/stream_service)
+[![c9](http://wiki.teamliquid.net/commons/images/thumb/f/fd/Cloud9.png/48px-Cloud9.png) - editor](https://ide.c9.io/rasart/stream_service)
 
 
 ```dart
@@ -18,11 +18,12 @@ library example_library;
 
 import 'dart:async';
 
-import 'package:stream_service/stream_service.dart';
+import 'package:avalanche_events/avalanche_events.dart';
 
-/// Simple extend class
-class BestClass extends StreamService {}
-class OtherBestClass extends StreamService {}
+/// Extend class
+class BestClass extends AvalancheEvents {}
+/// Or extend Object with mixins
+class OtherBestClass extends Object with NotifyMixin, ObservableMixin {}
 
 void main() {
     BestClass bestClass = new BestClass();
@@ -36,18 +37,6 @@ void main() {
     });
     
     bestClass.dispatchEvent('Event from bestClass', true);
-}
-
-```
-
-Or if your class already have extends:
-```dart
-class OtherBestClass extends Object with ObservableMixin, NotifyMixin {
-    
-    /// Custom controller
-    OtherBestClass() {
-       /// Nothing todo 
-    }
 }
 
 ```

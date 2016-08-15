@@ -2,9 +2,9 @@ library stream_service_test;
 
 import 'package:test/test.dart';
 
-import 'package:stream_service/stream_service.dart';
+import 'package:avalanche_events/avalanche_events.dart';
 
-class TestStreamService extends StreamService {}
+class TestStreamService extends AvalancheEvents {}
 
 main() async {
   TestStreamService firstTestObject;
@@ -15,8 +15,8 @@ main() async {
     secondTestObject = new TestStreamService();
   });
 
-  group('StreamService', () {
-    test('can be extendable', () {
+  group('Avalanche events', () {
+    test('class can be extendable', () {
       expect(firstTestObject.hashCode != secondTestObject.hashCode, isTrue);
 
       expect(
@@ -26,7 +26,7 @@ main() async {
       expect(firstTestObject.hashCode != secondTestObject.hashCode, isTrue);
     });
 
-    test('can be observable', () async {
+    test('object can be observable', () async {
       firstTestObject.observable(secondTestObject);
       expect(firstTestObject.observers.contains(secondTestObject), isTrue);
       expect(secondTestObject.observables.contains(firstTestObject), isTrue);
@@ -36,7 +36,7 @@ main() async {
       expect(firstTestObject.observables.contains(secondTestObject), isTrue);
     });
 
-    test('can dispatch and get event', () async {
+    test('object can dispatch and get event', () async {
       firstTestObject.observable(secondTestObject);
 
       secondTestObject.on(

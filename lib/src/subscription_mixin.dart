@@ -1,1 +1,1 @@
-part of stream_service;
+part of avalanche_events;

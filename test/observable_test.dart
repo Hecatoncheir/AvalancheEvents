@@ -2,7 +2,7 @@ library observable_test;
 
 import 'package:test/test.dart';
 
-import 'package:stream_service/stream_service.dart';
+import 'package:avalanche_events/avalanche_events.dart';
 
 class TestObservable extends Object with ObservableMixin {}
 

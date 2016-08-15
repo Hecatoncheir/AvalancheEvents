@@ -1,4 +1,4 @@
-part of stream_service;
+part of avalanche_events;
 
 /// Миксин для создания события с подписью
 /// и разсылки их объеектам-наблюдателям.
