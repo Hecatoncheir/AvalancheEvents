@@ -1,12 +1,12 @@
 name: avalanche_events
-version: 0.10.3
+version: 0.10.4
 author: Vitaliy Vostrikov <rasart.pro@gmail.com>
 homepage: https://github.com/Rasarts/AvalancheEvents
 documentation: https://github.com/Rasarts/AvalancheEvents/wiki
 description: >
   Avalanche events:
-    - Stream for decouple many objects
-    - Simple subscription on object events
-    - Work both, on client and server
+    Stream for decouple many objects;
+    Simple subscription on object events;
+    Work both, on client and server;
 dev_dependencies:
   test: '^0.12.15+3'
