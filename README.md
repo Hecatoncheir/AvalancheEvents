@@ -9,7 +9,7 @@
 )](https://codeship.com/projects/d800fba0-28ea-0134-04f3-5a347c0ad183/status?branch=master
 )
 
-[![c9](http://wiki.teamliquid.net/commons/images/thumb/f/fd/Cloud9.png/48px-Cloud9.png) - editor](https://ide.c9.io/rasart/stream_service)
+[![c9](http://wiki.teamliquid.net/commons/images/thumb/f/fd/Cloud9.png/48px-Cloud9.png) - editor](https://ide.c9.io/rasart/avalanche_events)
 
 
 ```dart
