@@ -7,7 +7,8 @@ part 'src/notify_mixin.dart';
 part 'src/observable_mixin.dart';
 part 'src/subscription_mixin.dart';
 
-class AvalancheEvents extends Object with NotifyMixin, ObservableMixin {
+class AvalancheEvents extends Object
+    with NotifyMixin, ObservableMixin, SubscriptionMixin {
   StreamController controller;
   Stream stream;
 

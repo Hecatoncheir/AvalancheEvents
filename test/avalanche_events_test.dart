@@ -36,6 +36,16 @@ main() async {
       expect(firstTestObject.observables.contains(secondTestObject), isTrue);
     });
 
+    test('object can subscribe', () async {
+      secondTestObject.subscribe(firstTestObject);
+      expect(firstTestObject.observers.contains(secondTestObject), isTrue);
+      expect(secondTestObject.observables.contains(firstTestObject), isTrue);
+
+      firstTestObject.subscribe(secondTestObject);
+      expect(secondTestObject.observers.contains(firstTestObject), isTrue);
+      expect(firstTestObject.observables.contains(secondTestObject), isTrue);
+    });
+
     test('object can dispatch and get event', () async {
       firstTestObject.observable(secondTestObject);
 
@@ -58,7 +68,7 @@ main() async {
               .contains('testEventFromFirstTestObject'),
           isTrue);
 
-      secondTestObject.observable(firstTestObject);
+      firstTestObject.subscribe(secondTestObject);
 
       firstTestObject.on(
           'testEventFromSecondTestObject',

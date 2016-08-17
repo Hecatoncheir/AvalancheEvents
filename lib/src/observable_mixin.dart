@@ -2,10 +2,10 @@ part of avalanche_events;
 
 class ObservableMixin {
   /// Список наблюдателей
-  List<ObservableMixin> observers = new List();
+  List observers = new List();
 
   /// Список наблюдаемых объектов
-  List<ObservableMixin> observables = new List();
+  List observables = new List();
 
   /// Добавление объектов в списки друг друга
   observable(ObservableMixin observableObject) {
