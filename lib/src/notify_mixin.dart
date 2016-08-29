@@ -22,7 +22,7 @@ class NotifyMixin {
   /// Если поток еще не создан
   /// нужно инициализировать
   /// контроллер и его поток.
-  void checkStream() {
+  checkStream() async {
     if (this.stream == null) {
       if (this.controller == null) {
         this.controller = new StreamController();
@@ -38,12 +38,12 @@ class NotifyMixin {
   /// Так же если есть обработчик внутри объекта создавшего событие
   /// событие публикуется и в его поток.
   /// Поведение похожее на паттерн Mediator.
-  dispatchEvent(String message, [dynamic details]) {
+  dispatchEvent(String message, [dynamic details]) async {
     Map detail = new Map(); // Детали события
     detail['message'] = message;
     detail['details'] = details;
 
-    checkStream(); // Проверка потока и его контроллера
+    await checkStream(); // Проверка потока и его контроллера
 
     /// Добавление подписи события в
     /// список создаваемых объектом событий.
@@ -65,7 +65,7 @@ class NotifyMixin {
       /// Когда наблюдаемый объект создает событие
       /// наблюдатели должны его получить.
       if (this.observers != null && this.observers is List) {
-        this.observers.forEach((NotifyMixin observableObject) {
+        this.observers.forEach((NotifyMixin observableObject) async {
           if (observableObject.treatmentEvents.contains(message)) {
             observableObject.controller.add(detail);
           }
@@ -77,8 +77,8 @@ class NotifyMixin {
   }
 
   /// Подписка на событие обработчика
-  on(String message, Function handler) {
-    checkStream(); // Проверка потока и его контроллера
+  on(String message, Function handler) async {
+    await checkStream(); // Проверка потока и его контроллера
 
     /// Добавление подписи обрабатываемого события в
     /// список ожидаемых объектом событий.
@@ -92,7 +92,7 @@ class NotifyMixin {
     /// на собственный поток.
     /// Потому как сюда будут публиковаться события
     /// из наблюдаемых объектов.
-    this.stream.listen((Map data) {
+    this.stream.listen((Map data) async {
       if (data['message'] == message) {
         if (data['details'] != null) {
           var details = data['details'];

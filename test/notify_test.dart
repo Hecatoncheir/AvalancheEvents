@@ -13,19 +13,19 @@ main() async {
   });
 
   group('Notify mixin', () {
-    test('can dispatch and register event in generatedEvents list', () {
-      testObject.dispatchEvent('testEvent');
+    test('can dispatch and register event in generatedEvents list', () async {
+      await testObject.dispatchEvent('testEvent');
       expect(testObject.generatedEvents.contains('testEvent'), isTrue);
     });
 
     test(
         'can set handler for event and register event message in treatmentEvents list',
-        () {
-      testObject.on('testEvent', () {});
+        () async {
+      await testObject.on('testEvent', () {});
       expect(testObject.treatmentEvents.contains('testEvent'), isTrue);
     });
 
-    test('can listen event', () {
+    test('can listen event', () async {
       testObject.on(
           'testEvent',
           expectAsync((Map data) {

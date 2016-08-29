@@ -15,7 +15,7 @@ main() async {
   });
 
   group('Observable mixin', () {
-    test('can add observers', () {
+    test('can add observers', () async {
       expect(secondTestObject.observers, isNotNull);
 
       secondTestObject.observable(firstTestObject);
@@ -23,7 +23,7 @@ main() async {
       expect(firstTestObject.observables.contains(secondTestObject), isTrue);
     });
 
-    test('can remove observers', () {
+    test('can remove observers', () async {
       secondTestObject.observable(firstTestObject);
       expect(secondTestObject.observers.contains(firstTestObject), isTrue);
       expect(firstTestObject.observables.contains(secondTestObject), isTrue);
@@ -33,7 +33,7 @@ main() async {
       expect(!firstTestObject.observables.contains(secondTestObject), isTrue);
     });
 
-    test('can remove observables', () {
+    test('can remove observables', () async {
       TestObservable testObservable = new TestObservable();
 
       testObservable.observable(firstTestObject);

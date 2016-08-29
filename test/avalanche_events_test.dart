@@ -26,7 +26,7 @@ main() async {
       expect(firstTestObject.hashCode != secondTestObject.hashCode, isTrue);
     });
 
-    test('object can be observable', () async {
+    test('object can be observable', () {
       firstTestObject.observable(secondTestObject);
       expect(firstTestObject.observers.contains(secondTestObject), isTrue);
       expect(secondTestObject.observables.contains(firstTestObject), isTrue);
@@ -36,7 +36,7 @@ main() async {
       expect(firstTestObject.observables.contains(secondTestObject), isTrue);
     });
 
-    test('object can subscribe', () async {
+    test('object can subscribe', () {
       secondTestObject.subscribe(firstTestObject);
       expect(firstTestObject.observers.contains(secondTestObject), isTrue);
       expect(secondTestObject.observables.contains(firstTestObject), isTrue);
@@ -46,8 +46,22 @@ main() async {
       expect(firstTestObject.observables.contains(secondTestObject), isTrue);
     });
 
-    test('object can dispatch and get event', () async {
+    test('object can dispatch and get event', () {
       firstTestObject.observable(secondTestObject);
+
+      secondTestObject.stream.listen(expectAsync((event) {
+        expect(
+            secondTestObject.treatmentEvents
+                .contains('testEventFromFirstTestObject'),
+            isTrue);
+      }, count: 1));
+
+      firstTestObject.stream.listen(expectAsync((event) {
+        expect(
+            firstTestObject.generatedEvents
+                .contains('testEventFromFirstTestObject'),
+            isTrue);
+      }, count: 1));
 
       secondTestObject.on(
           'testEventFromFirstTestObject',
@@ -55,18 +69,8 @@ main() async {
             expect(data['details'], isTrue);
           }, count: 1));
 
-      expect(
-          secondTestObject.treatmentEvents
-              .contains('testEventFromFirstTestObject'),
-          isTrue);
-
       firstTestObject
           .dispatchEvent('testEventFromFirstTestObject', {'details': true});
-
-      expect(
-          firstTestObject.generatedEvents
-              .contains('testEventFromFirstTestObject'),
-          isTrue);
 
       firstTestObject.subscribe(secondTestObject);
 
@@ -76,18 +80,22 @@ main() async {
             expect(data['details'], isTrue);
           }, count: 1));
 
-      expect(
-          firstTestObject.treatmentEvents
-              .contains('testEventFromSecondTestObject'),
-          isTrue);
+      firstTestObject.stream.listen(expectAsync((event) {
+        expect(
+            firstTestObject.treatmentEvents
+                .contains('testEventFromSecondTestObject'),
+            isTrue);
+      }));
+
+      secondTestObject.stream.listen(expectAsync((event) {
+        expect(
+            secondTestObject.generatedEvents
+                .contains('testEventFromSecondTestObject'),
+            isTrue);
+      }));
 
       secondTestObject
           .dispatchEvent('testEventFromSecondTestObject', {'details': true});
-
-      expect(
-          secondTestObject.generatedEvents
-              .contains('testEventFromSecondTestObject'),
-          isTrue);
     });
   });
 }

@@ -1,5 +1,5 @@
 name: avalanche_events
-version: 0.10.6
+version: 0.10.7
 author: Vitaliy Vostrikov <rasart.pro@gmail.com>
 homepage: https://github.com/Rasarts/AvalancheEvents
 documentation: https://github.com/Rasarts/AvalancheEvents/wiki
@@ -9,4 +9,4 @@ description: >
     Simple subscription on object events;
     Work both, on client and server;
 dev_dependencies:
-  test: '^0.12.15+3'
+  test: '^0.12.15+6'
