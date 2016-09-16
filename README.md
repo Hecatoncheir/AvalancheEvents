@@ -7,7 +7,7 @@ Avalanche events
 
 **All you need is stream**
 
-[![Build Status](https://travis-ci.org/Rasarts/AvalancheEvents.svg?branch=master)](https://travis-ci.org/Rasarts/AvalancheEvents)[![pub package](https://img.shields.io/pub/v/avalanche_events.svg?style=flat)](https://pub.dartlang.org/packages/avalanche_events)
+[![Build Status](https://travis-ci.org/Rasarts/AvalancheEvents.svg?branch=master)](https://travis-ci.org/Rasarts/AvalancheEvents) [![pub package](https://img.shields.io/pub/v/avalanche_events.svg?style=flat)](https://pub.dartlang.org/packages/avalanche_events)
 
 [![c9](http://wiki.teamliquid.net/commons/images/thumb/f/fd/Cloud9.png/48px-Cloud9.png) - editor](https://ide.c9.io/rasart/avalanche_events)
 
